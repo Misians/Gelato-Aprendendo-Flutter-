@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PreloadPage extends StatefulWidget {
   const PreloadPage({super.key});
@@ -9,10 +10,11 @@ class PreloadPage extends StatefulWidget {
 }
 
 class _PreloadPage extends State<PreloadPage> {
-  bool loading = false;
+  bool loading = true;
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return Scaffold(
         body: Center(
             child: Column(
