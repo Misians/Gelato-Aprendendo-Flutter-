@@ -21,7 +21,35 @@ class _PreloadPage extends State<PreloadPage> {
         Image.asset(
           'lib/assets/logo.png',
           width: 200,
-        )
+        ),
+//
+        loading
+            ? Container(
+                margin: const EdgeInsets.all(20),
+                child: const Text(
+                  'Pegando seus sorvetinhos...',
+                  style: TextStyle(
+                      fontSize: 16, color: Color.fromARGB(156, 201, 0, 117)),
+                ),
+              )
+            : Container(),
+
+        //
+        loading
+            ? CircularProgressIndicator(
+                strokeWidth: 3,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.pinkAccent),
+              )
+            : Container(),
+
+        !loading
+            ? Container(
+                margin: const EdgeInsets.all(20),
+                child: ElevatedButton(
+                  child: Text('Tentar novamente'),
+                  onPressed: () {},
+                ))
+            : Container(),
       ],
     )));
   }
