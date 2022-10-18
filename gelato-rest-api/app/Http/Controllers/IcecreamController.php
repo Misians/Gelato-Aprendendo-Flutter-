@@ -14,7 +14,7 @@ class IcecreamController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Icecream::paginate(), 200);
     }
 
     /**
@@ -35,7 +35,25 @@ class IcecreamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $fields = $request->all();
+        $request->validate([
+            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
+            'name' => 'required'
+        ]);
+
+        $imageName = time().'.'.$request->image->extension();
+
+        // Public Folder
+        $image = $request->image->move(public_path('images'), $imageName);
+        $fields['image'] = 'images/'.$imageName;
+        $ice = Icecream::create($fields);
+        if(!$ice){
+            return response()->json(['error'=>'Ups! There was an error while trying to store the record.']);
+        }
+        
+        return response()->json($ice, 200);
+
     }
 
     /**
@@ -44,9 +62,13 @@ class IcecreamController extends Controller
      * @param  \App\Models\Icecream  $icecream
      * @return \Illuminate\Http\Response
      */
-    public function show(Icecream $icecream)
+    public function show($id)
     {
-        //
+        $ice = Icecream::find($id);
+        if(!$ice){
+            return response()->json(['error'=>'Record Not Found!'], 404);
+        }
+        return response()->json($ice, 200);
     }
 
     /**
@@ -67,9 +89,14 @@ class IcecreamController extends Controller
      * @param  \App\Models\Icecream  $icecream
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Icecream $icecream)
+    public function update(Request $request,  $id)
     {
-        //
+        $ice = Icecream::find($id);
+        if(!$ice){
+            return response()->json(['error'=>'Record Not Found!'], 404);
+        }   
+        $result = $ice->fill($request->all())->save();
+        return response()->json($ice, 200);
     }
 
     /**
@@ -80,6 +107,10 @@ class IcecreamController extends Controller
      */
     public function destroy(Icecream $icecream)
     {
-        //
+        $ice = Icecream::find($id);
+        if(!$ice){
+            return response()->json(['error'=>'Record Not Found!'], 404);
+        }
+        return response()->json($ice->delete(), 200);
     }
 }

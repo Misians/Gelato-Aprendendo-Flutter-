@@ -21,7 +21,7 @@ class Icecream extends Model
         'quantity',
         'is_vegan',
         'no_sugar',
-        'img',
+        'image',
         'likes',
     ];
 

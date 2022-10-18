@@ -13,14 +13,14 @@ class CreatingIcecreamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('icecream', function (Blueprint $table) {
+        Schema::create('icecreams', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->float('price');
             $table->integer('quantity');
             $table->string('is_vegan');
             $table->string('no_sugar');
-            $table->string('img')->default('no-image.png');
+            $table->string('image')->default('no-image.png');
             $table->integer('likes')->default(0);
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ class CreatingIcecreamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('icecream');
+        Schema::dropIfExists('icecreams');
     }
 }
