@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../models/appdata.dart';
 
 class PreloadPage extends StatefulWidget {
   const PreloadPage({super.key});
@@ -11,6 +13,30 @@ class PreloadPage extends StatefulWidget {
 
 class _PreloadPage extends State<PreloadPage> {
   bool loading = true;
+
+  void requestInfo() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      loading = true;
+    });
+    bool req = await Provider.of<AppData>(context, listen: false).requestData();
+    if (req) {
+      //go to home
+      print('deu certo, puxando infos');
+      Navigator.pushNamed(context, '/home');
+    } else {
+      //set loading false
+      print('deu ruim, algo deu errado');
+      loading = false;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    requestInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +64,7 @@ class _PreloadPage extends State<PreloadPage> {
 
         //
         loading
-            ? CircularProgressIndicator(
+            ? const CircularProgressIndicator(
                 strokeWidth: 3,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.pinkAccent),
               )
@@ -48,7 +74,7 @@ class _PreloadPage extends State<PreloadPage> {
             ? Container(
                 margin: const EdgeInsets.all(20),
                 child: ElevatedButton(
-                  child: Text('Tentar novamente'),
+                  child: const Text('Tentar novamente'),
                   onPressed: () {},
                 ))
             : Container(),
